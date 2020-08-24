@@ -2,18 +2,15 @@ const path = require('path');
 
 module.exports = {
   mode: 'production',
-  entry: "src/index.ts",
+  entry: "./src/index.ts",
   module: {
-    rules: [{ test: /\.ts$/, use: 'ts-loader', exlude: /node_modules/}],
+    rules: [{ test: /\.tsx?$/, use: 'ts-loader'}],
   },
   output: {
-    filename: '[name].js',
-    libraryTarget: 'umd',
-    globalObject: 'this',
-    umoNamedDefined: true,
-    path: path.resolve(__dirname, 'lib/hub-umd'),
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'lib/hub'),
   },
-  reolve: {
+  resolve: {
     extensions: ['.js', '.ts'],
   }
 };
