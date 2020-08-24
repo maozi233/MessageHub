@@ -1,6 +1,12 @@
 {
-  "compilerOptions":{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "./dist",
     "noEmitOnError": true,
+    "strict": true
   },
-  "includes": ["./scr"]
+  "exclude": ["./dist", "./test", "node_modules"],
+  "include": ["./src"],
 }
