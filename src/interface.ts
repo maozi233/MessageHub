@@ -1,5 +1,4 @@
 export interface HubConfig {
-  name: string;
-  timeout?: number;
-  log?: boolean;
+  timeout: number;
+  log: boolean;
 }
