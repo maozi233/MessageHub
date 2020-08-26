@@ -5,7 +5,8 @@
   "main": "./dis/umd/index.js",
   "scripts": {
     "clean": "rm -rf ./lib",
-    "build": "npm run clean && webpack"
+    "build": "npm run clean && webpack",
+    "dev": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,11 @@
     "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
     "babel-loader": "^8.1.0",
+    "html-webpack-plugin": "^4.3.0",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
