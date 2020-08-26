@@ -9,7 +9,13 @@
 </body>
 <script>
   const { MessageHub } = window.__hub__;
-  const hub = new MessageHub();
+  const tasks = [
+    {name: 'dialog1', priority: 2000},
+    {name: 'dialog2', priority: 1000},
+  ];
+  const hub = new MessageHub(tasks, {
+    log: true
+  });
   console.log(hub);
 </script>
 </html>
