@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./lib/hub",
+    "outDir": "./dist/umd",
     "noEmitOnError": true,
     "strict": true
   },

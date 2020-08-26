@@ -1,0 +1,1 @@
+export { MessageHub } from './hub';

@@ -6,7 +6,11 @@
   <title>Document</title>
 </head>
 <body>
-  <script src="./lib/hub/index.js"></script>
+  <script src="./dist/umd/index.js"></script>
+  <script>
+    const { MessageHub } = window.__hub__;
+    const hub = new MessageHub();
+    console.log(hub);
   </script>
 </body>
 </html>
