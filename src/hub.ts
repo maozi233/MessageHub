@@ -1,10 +1,11 @@
-import { HubConfig, Task } from './interface';
-import { defaultConfig } from './type';
+import { HubConfig, Task } from './types/interface';
+import { defaultConfig } from './types/type';
 
 export class MessageHub {
   private timeout: number = defaultConfig.timeout;
   private needLog: boolean = defaultConfig.log;
   private logTemp: string = '【MessageHub】:';
+  private tasks: Array<Task> = [];
 
   constructor(tasks: Array<Task>, {timeout = 0, log = false}: HubConfig = defaultConfig) {
     this.timeout = timeout;
@@ -19,6 +20,9 @@ export class MessageHub {
 
   private init(tasks: Array<Task>): void {
     const validTasks = this.getValidTask(tasks);
+    if (validTasks.length) {
+      this.tasks = validTasks;
+    }
   }
 
   private getValidTask(tasks: Array<Task>): Array<Task> {
@@ -38,11 +42,11 @@ export class MessageHub {
       validKey.set(name, name);
       validTasks.push(task);
     }
-    if (validTasks.length) {
-      this.log(`已添加任务 [${validTasks.map(e => e.name)}]`)
-      return validTasks;
+    if (!validTasks.length) {
+      throw new Error(`${this.logTemp} 任务队列注册失败`);
     }
-    throw new Error(`${this.logTemp} 任务队列注册失败`);
+    this.log(`已添加任务 [${validTasks.map(e => e.name)}]`);
+    return validTasks;
   }
 
   private log(str: string, method: string = 'info'): void {
