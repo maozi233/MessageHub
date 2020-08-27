@@ -3,12 +3,12 @@ import { defaultConfig } from './type';
 
 export class MessageHub {
   private timeout: number = defaultConfig.timeout;
-  private log: boolean = defaultConfig.log;
+  private needLog: boolean = defaultConfig.log;
   private logTemp: string = '【MessageHub】:';
 
   constructor(tasks: Array<Task>, {timeout = 0, log = false}: HubConfig = defaultConfig) {
     this.timeout = timeout;
-    this.log = log;
+    this.needLog = log;
 
     if (Array.isArray(tasks) && tasks.length) {
       this.init(tasks);
@@ -27,26 +27,26 @@ export class MessageHub {
     for (let i = 0; i < tasks.length; i++) {
       const task = tasks[i];
       const { name, priority } = task;
-      if (name && priority) {
-        if (!validKey.has(name)) {
-          validKey.set(name, name);
-          validTasks.push(task);
-        } else {
-          this.console(`已有的task name: ${name}`)
-        }
-      } else {
-        this.console('非法task (task对象必须具有name和priority属性)')
+      if (!name || !priority) {
+        this.log('非法task (task对象必须具有name和priority属性)');
+        continue;
       }
+      if (validKey.has(name)) {
+        this.log(`已有的task、 name: ${name}`)
+        continue;
+      }
+      validKey.set(name, name);
+      validTasks.push(task);
     }
     if (validTasks.length) {
-      this.console(`已添加任务 [${validTasks.map(e => e.name)}]`)
+      this.log(`已添加任务 [${validTasks.map(e => e.name)}]`)
       return validTasks;
     }
     throw new Error(`${this.logTemp} 任务队列注册失败`);
   }
 
-  private console(str: string): void {
-    if (this.log) {
+  private log(str: string, method: string = 'info'): void {
+    if (this.needLog) {
       console.info(`${this.logTemp} ${str}`)
     }
   }
