@@ -14,12 +14,16 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
   ],
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
+  },
   rules: {
     'no-continue': 'off',
-    'import/no-unresolved': 'off',
-    'import/extensions': 'off',
+    'import/extensions': [2, 'never', { 'web.js': 'never', json: 'never' }],
     'import/prefer-default-export': 'off',
-    'no-unused-vars': 'off',
     'no-bitwise': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
 };
