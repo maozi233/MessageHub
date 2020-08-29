@@ -1,8 +1,12 @@
-import { HubConfig, Task, TaskItemStatus } from './types/interface';
+import {
+  HubConfig, Task, TaskItemStatus, Event,
+} from './types/interface';
 import { defaultConfig } from './types/type';
 
 export class MessageHub {
   private timeout: number = defaultConfig.timeout;
+
+  private watchTimeEnd: boolean = false;
 
   private needLog: boolean = defaultConfig.log;
 
@@ -11,6 +15,10 @@ export class MessageHub {
   private tasks: Array<Task> = [];
 
   private completed: boolean = false;
+
+  private watcher: any = null;
+
+  private event: Event = { end: () => {} };
 
   constructor(tasks: Array<Task>, { timeout = 0, log = false }: HubConfig = defaultConfig) {
     this.timeout = timeout;
@@ -30,6 +38,10 @@ export class MessageHub {
         ...task,
         status: TaskItemStatus.Pending,
       }));
+      // 创建超时检测
+      if (this.timeout && typeof this.timeout === 'number') {
+        this.watchTimeout();
+      }
     }
   }
 
@@ -54,6 +66,17 @@ export class MessageHub {
       }
     } else {
       this.log(`#exec# 不存在的任务 ${name}`);
+    }
+  }
+
+  /**
+   * 注册回调事件
+   * @param target 事件名称
+   * @param callback 回调方法
+   */
+  public on(target: string, callback: Function): void {
+    if (typeof callback === 'function') {
+      this.event[target] = callback;
     }
   }
 
@@ -97,7 +120,7 @@ export class MessageHub {
 
   private getExecutable(): any {
     // 有超时
-    if (this.timeout) {
+    if (this.timeout && this.watchTimeEnd) {
       const executeable = this.tasks.filter((t) => TaskItemStatus.Resolved === t.status);
       const sort = executeable.sort((a, b) => b.priority - a.priority);
       const [theone] = sort;
@@ -111,11 +134,42 @@ export class MessageHub {
     return undefined;
   }
 
-  private excuteTheone(theone: Task) {
+  private excuteTheone(theone: Task): void {
     if (theone.callback && typeof theone.callback === 'function') {
       theone.callback();
       this.completed = true;
+      if (this.watcher) {
+        clearTimeout(this.watcher);
+      }
+      this.handleEvent('end', theone);
       this.log(`#excuteTheone# 队列结束，执行了方法${theone.name}`);
+    }
+  }
+
+  private watchTimeout(): void {
+    this.watcher = setTimeout(() => {
+      this.watchTimeEnd = true;
+      this.log(`#watchTimeout# 监听队列到达超时时间 ${this.timeout}ms`);
+      if (!this.completed) {
+        const theone = this.getExecutable();
+        if (theone) {
+          this.excuteTheone(theone);
+        } else {
+          this.log('#watchTimeout# 超时监听结束，没有可执行的任务');
+        }
+        // 标记任务结束
+        this.completed = true;
+      }
+    }, this.timeout);
+    this.log(`#watchTimeout# 创建进行超时监听队列 时长${this.timeout}`);
+  }
+
+  private handleEvent(target: string, task?: Task): void {
+    const callback = this.event[target];
+    if (callback && typeof callback) {
+      if (target === 'end') {
+        callback(task && task.name);
+      }
     }
   }
 

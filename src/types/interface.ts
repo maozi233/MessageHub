@@ -20,3 +20,8 @@ export interface Task {
   status?: TaskItemStatus | undefined;
   callback?: Function;
 }
+
+export interface Event {
+  end: Function;
+  [key: string]: Function;
+}
