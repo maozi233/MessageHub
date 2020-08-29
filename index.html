@@ -15,6 +15,7 @@
   ];
   const hub = new MessageHub(tasks, {
     log: true,
+    timeout: 600,
   });
   hub.on('end', (name) => {
     console.log('收到了 hub 的结束回调执行了', name);
@@ -27,6 +28,7 @@
     hub.exec('营销弹窗', () => {
       console.log('营销弹窗 执行了');
     })
+    hub.cancelTask('营销弹窗asds');
   }, 500);
   setTimeout(() => {
     hub.exec('用户干扰弹窗', () => {

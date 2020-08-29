@@ -113,9 +113,10 @@ export class MessageHub {
     return Boolean(task);
   }
 
-  private dispatch(task: Task, status: TaskItemStatus): void {
+  private dispatch(task: Task, status: TaskItemStatus): boolean {
     this.log(`#dispatch# ${task.name} 的状态由 ${task.status} 改为 ${status}`);
     task.status = status;
+    return true;
   }
 
   private getExecutable(): any {
@@ -132,6 +133,20 @@ export class MessageHub {
       return theone;
     }
     return undefined;
+  }
+
+  public cancelTask(name: string): boolean {
+    let flag = false;
+    if (!this.completed && this.exist(name)) {
+      const task = this.tasks.find((t) => t.name === name);
+      if (task) {
+        flag = this.dispatch(task, TaskItemStatus.Canceled);
+      }
+    }
+    if (!flag) {
+      this.log(`#cancelTask# 队列已结束或${name}不存在队列中， ${name}取消失败`);
+    }
+    return flag;
   }
 
   private excuteTheone(theone: Task): void {
