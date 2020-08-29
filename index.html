@@ -10,12 +10,32 @@
 <script>
   const { MessageHub } = window.__hub__;
   const tasks = [
-    {name: 'dialog1', priority: 2000},
-    {name: 'dialog2', priority: 1000},
+    {name: '用户干扰弹窗', priority: 2000},
+    {name: '营销弹窗', priority: 1000},
   ];
   const hub = new MessageHub(tasks, {
-    log: true
+    log: true,
   });
+  hub.on('end', (name) => {
+    console.log('收到了 hub 的结束回调执行了', name);
+  })
+
+  // hub.exec('端内push', () => {
+  //   console.log('端内push已准备完毕');
+  // })
+  setTimeout(() => {
+    hub.exec('营销弹窗', () => {
+      console.log('营销弹窗 执行了');
+    })
+  }, 500);
+  setTimeout(() => {
+    hub.exec('用户干扰弹窗', () => {
+      console.log('用户干扰弹窗 执行了');
+    })
+    hub.exec('用户干扰弹窗', () => {
+      console.log('用户干扰弹窗 执行了');
+    })
+  }, 2000);
   console.log(hub);
 </script>
 </html>
