@@ -3,24 +3,24 @@
 
 ## 使用方式
 ```javascript
-// 配置队列中的任务
+// 1. 配置队列中的任务
 const dialog = {
   USER_MESSAGE: '用户干扰弹窗',
   MARKET_MESSAGE: '营销弹窗',
 };
 const tasks = [
-  {name: dialog.USER_MESSAGE, priority: 2000},
+  {name: dialog.USER_MESSAGE, priority: 2000}, // priority越大优先级越高
   {name: dialog.MARKET_MESSAGE, priority: 1000},
 ];
-// 注册队列
+
+// 2.注册队列
 const hub = new MessageHub(tasks, {
   log: true, // 是否需要调试信息
-  timeout: 600, // 是否有超时
+  timeout: 600, // 是否超时后自动执行（exec标记为可执行后的任务）
 });
-/** 标记任务待执行(hub内部自动根据priority和timeout配置来决定在还行哪个)
- * 1. priority越大优先级越高
- * 2. timeout时间到的时候自动执行（exec标记为可执行后的任务）
- */
+
+
+// 3.标记待执行
 hub.exec(dialog.MARKET_MESSAGE, () => {
   this.marketDialogVisible = true;
 })
