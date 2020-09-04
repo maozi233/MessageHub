@@ -39,7 +39,7 @@ setTimeout(() => {
  * @return boolean
  * 任务队列结束前可以把某个任务状态置为待执行
  */
-public exec(name: string, callback: Function): void {
+public exec(name: string, callback: Function): void {}
 
 /**
  * @params name
@@ -53,8 +53,7 @@ cancelTask(name: string): boolean {}
  * @param target 事件名称 //暂时只支持end
  * @param callback 回调方法
  */
-on(target: string, callback: Function): void {
-}
+on(target: string, callback: Function): void {}
 
 
 ```
