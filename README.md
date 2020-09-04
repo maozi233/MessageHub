@@ -32,14 +32,14 @@ setTimeout(() => {
 }, 700);
 ```
 
-## 方法
+## 实例方法
 ```javascript
 /**
  * @params name
  * @return boolean
  * 任务队列结束前可以把某个任务状态置为待执行
  */
-public exec(name: string, callback: Function): void {}
+exec(name: string, callback: Function): void {}
 
 /**
  * @params name
