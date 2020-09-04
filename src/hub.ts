@@ -119,7 +119,7 @@ export class MessageHub {
     return true;
   }
 
-  private getExecutable(): any {
+  private getExecutable(): Task|undefined {
     // 有超时
     if (this.timeout && this.watchTimeEnd) {
       const executeable = this.tasks.filter((t) => TaskItemStatus.Resolved === t.status);
