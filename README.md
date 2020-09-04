@@ -21,7 +21,7 @@ const hub = new MessageHub(tasks, {
  * 1. priority越大优先级越高
  * 2. timeout时间到的时候自动执行（exec标记为可执行后的任务）
  */
-hub.exec(dialog.MARKET_MESSAGE, showMarketDialog() => {
+hub.exec(dialog.MARKET_MESSAGE, () => {
   this.marketDialogVisible = true;
 })
 // 这个不会执行，已经超过了600ms
